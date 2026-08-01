@@ -42,7 +42,7 @@ A function is considered _total_ if it can return a value for any combination of
 
 For example the function `divide(int, int): float` is not total because it will have to throw an exception for a division by `0`. On the other hand `divide(int, int): ?float` is total because it can return `null` in case of a division by `0`.
 
-The advantage of using total functions is that a [static analysis tool](development.md#type-strictness) can automatically check all the combinations to make sure your programm won't crash. It eliminates the need to write tests for the exceptions or the surprises of the runtime.
+The advantage of using total functions is that a [static analysis tool](development.md#type-strictness) can automatically check all the combinations to make sure your program won't crash. It eliminates the need to write tests for the exceptions or the surprises of the runtime.
 
 Innmind heavily relies on this design to reduce the mental load of making sure every unhappy path is covered.
 
