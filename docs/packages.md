@@ -10,7 +10,7 @@ hide:
 Immutable object version to define unix permissions.
 
 ```sh
-composer require innmind/acl:~3.1
+composer require innmind/acl:~4.0
 ```
 
 ```php
@@ -34,7 +34,7 @@ $acl->allows(User::of('foo'), Group::of('bar'), Mode::execute); // true
 Specifies the code style used throughout Innmind.
 
 ```sh
-composer require --dev innmind/coding-standard:~2.0
+composer require --dev innmind/coding-standard:~2.2
 ```
 
 ```php title=".php-cs-fixer.dist.php"
@@ -54,7 +54,7 @@ vendor/bin/php-cs-fixer fix
 Immutables objects to specify colours and switch between the notations (RGBA, HSL and CMYK).
 
 ```sh
-composer install innmind/colour:~4.2
+composer install innmind/colour:~5.1
 ```
 
 ```php
@@ -73,7 +73,7 @@ $rgba = Colour::blue->toRGBA();
 Immutable objects to define cron jobs and install them on a machine (local or remote).
 
 ```sh
-composer require innmind/cron '~4.0'
+composer require innmind/cron '~5.0'
 ```
 
 ```php
@@ -90,7 +90,7 @@ $install = Crontab::forUser(
         Command::foreground('say hello'),
     ),
 );
-$install($os->control());
+$install($os->control())->unwrap();
 ```
 
 [Repository](https://github.com/Innmind/Cron)
@@ -202,7 +202,7 @@ Object approach to handle HTTP sessions without a global state.
 Allows to read Apache access and Monolog logs into immutable objects in a memory safe way.
 
 ```sh
-composer require innmind/log-reader '~5.4'
+composer require innmind/log-reader '~6.0'
 ```
 
 ```php
@@ -263,7 +263,7 @@ Object API on top of the `rabbitmqadmin` CLI command.
 Allows to parse `robots.txt` files.
 
 ```sh
-composer require innmind/robots-txt '~6.3'
+composer require innmind/robots-txt '~7.0'
 ```
 
 ```php
@@ -286,64 +286,6 @@ $robots->disallows('My user agent', Url::of('/any/other/url')); // true
 ```
 
 [Repository](https://github.com/Innmind/Robots.txt)
-
-## SSH key provider
-
-Allows to fetch a user ssh keys from different sources.
-
-```sh
-composer require innmind/ssh-key-provider:~3.2
-```
-
-```php
-use Innmind\SshKeyProvider\{
-    Cache,
-    Merge,
-    Local,
-    Github,
-    PublicKey,
-};
-use Innmind\Url\Path;
-
-$provide = Cache::of(
-    Merge::of(
-        Local::of(
-            $os->filesystem()->mount(Path::of($_SERVER['USER'].'/.ssh/'))->unwrap(),
-        ),
-        Github::of(
-            $os->remote()->http(),
-            'GithubUsername',
-        ),
-    ),
-);
-
-$provide()->foreach(static fn(PublicKey $key) => print($key->toString()));
-```
-
-[Repository](https://github.com/Innmind/SshKeyProvider)
-
-## URL resolver
-
-Allows to resolve a target url from a base one. This is useful for crawlers.
-
-```sh
-composer require innmind/url-resolver:~5.1
-```
-
-```php
-use Innmind\UrlResolver\UrlResolver;
-use Innmind\Url\Url;
-
-$resolve = UrlResolver::of('http', 'https');
-
-$url = $resolve(
-    Url::of('http://example.com/foo/'),
-    Url::of('./bar/baz?query=string#fragment'),
-);
-// $url resolves to http://example.com/foo/bar/baz?query=string#fragment
-```
-
-[Repository](https://github.com/Innmind/url-resolver)
 
 ## Validation
 

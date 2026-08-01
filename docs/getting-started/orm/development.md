@@ -8,9 +8,9 @@ To keep things simple we'll work with an in memory persistence. You'll learn how
 
 ```php
 use Formal\ORM\Manager;
-use Innmind\Filesystem\Adapter\InMemory;
+use Innmind\Filesystem\Adapter;
 
-$orm = Manager::filesystem(InMemory::emulateFilesystem()); #(1)
+$orm = Manager::filesystem(Adapter::inMemory()); #(1)
 ```
 
 1. From this point on every time you see `$orm` it will come from this example.
@@ -344,8 +344,6 @@ final class UsernameType implements Type
     }
 }
 ```
-
-1. This is what tells the ORM the type this class supports converting.
 
 ??? tip
     You don't need to handle the `null` value in your type, the ORM already does that for you.

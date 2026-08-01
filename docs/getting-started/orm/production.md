@@ -29,7 +29,8 @@ use Innmind\Url\Url;
 
 $connection = $os
     ->remote()
-    ->sql(Url::of('mysql://user:password@127.0.0.1:3306/database'));
+    ->sql(Url::of('mysql://user:password@127.0.0.1:3306/database'))
+    ->unwrap();
 $orm = Manager::sql($connection);
 ```
 
@@ -122,8 +123,6 @@ $_ = $createIndex(User::class)->match(
 
 ## Filesystem
 
-### Local
-
 This is the best storage when starting to develop a new program as there's no schema to update. This allows for rapid prototyping.
 
 ```php
@@ -132,37 +131,9 @@ use Innmind\Url\Path;
 $orm = Manager::filesystem(
     $os
         ->filesystem()
-        ->mount(Path::of('path/where/to/store/data')),
+        ->mount(Path::of('path/where/to/store/data/'))
+        ->unwrap(),
 );
 ```
 
 And... that's it.
-
-### S3
-
-You should this storage for small programs without much concurrency that you need to synchronise for multiple clients. A good example is a CLI program that you want to work across multiple machines.
-
-First you need to require the S3 package:
-
-```sh
-composer require innmind/s3 '~5.0'
-```
-
-Then configure the ORM:
-
-```php
-use Innmind\S3\{
-    Factory,
-    Region,
-    Filesystem,
-};
-use Innmind\Url\Url;
-
-$bucket = Factory::of($os)->build(
-    Url::of('https://acces_key:acces_secret@bucket-name.s3.region-name.scw.cloud/'),
-    Region::of('region-name'),
-);
-$orm = Manager::filesystem(
-    Filesystem\Adapter::of($bucket),
-);
-```

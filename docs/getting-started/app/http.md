@@ -47,7 +47,10 @@ use Innmind\Http\{
     Headers,
     Header\ContentType,
 };
-use Innmind\MediaType\MediaType;
+use Innmind\MediaType\{
+    MediaType,
+    TopLevel,
+};
 use Innmind\Url\Path;
 use Innmind\Immutable\Predicate\Instance;
 
@@ -65,7 +68,7 @@ new class extends Main {
             Response\StatusCode::ok,
             $request->protocolVersion(),
             Headers::of(
-                ContentType::of(new MediaType('image', 'png')),
+                ContentType::of(MediaType::from(TopLevel::image, 'png')),
             ),
             $this
                 ->os

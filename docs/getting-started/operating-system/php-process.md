@@ -5,11 +5,12 @@
 If you need to pause your program to wait for external thing to happen (or any other reason), you can pause it this way:
 
 ```php
-use Innmind\TimeContinuum\Period;
+use Innmind\Time\Period;
 
 $os
     ->process()
-    ->halt(Period::second(10));
+    ->halt(Period::second(10))
+    ->unwrap();
 ```
 
 You can use any unit of period except months because it's not an absolute value.

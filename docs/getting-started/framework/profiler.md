@@ -1,8 +1,5 @@
 # Profiler
 
-!!! warning
-    This section is not yet compatible with the latest major version of the framework.
-
 Innmind comes with an optional profiler to help you debug your program.
 
 !!! success ""
@@ -11,7 +8,7 @@ Innmind comes with an optional profiler to help you debug your program.
 ## Installation
 
 ```sh
-composer require --dev innmind/debug:~4.0
+composer require --dev innmind/debug:~5.0
 ```
 
 ## Usage

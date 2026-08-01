@@ -13,7 +13,8 @@ use Innmind\Url\Url;
 
 $sql = $os
     ->remote()
-    ->sql(Url::of('mysql://user:password@127.0.0.1:3306/database_name'));
+    ->sql(Url::of('mysql://user:password@127.0.0.1:3306/database_name'))
+    ->unwrap();
 
 $sql(SQL::of('SELECT * FROM users'))->foreach(
     static fn(Row $row) => var_dump($row->toArray()),
@@ -142,10 +143,10 @@ All the queries you've seen so far return [deferred `Sequence`s](../handling-dat
 
 For most queries this is fine. But if you want to select a large amount of data that may not fit in memory you should use lazy queries.
 
-To do so instead of using `#!php SQL::of()`/`#!php Select::from()` use `#!php SQL::onDemand()`/`#!php Select::onDemand()`.
+To do so instead of using `#!php SQL::of()`/`#!php Select::from()` use `#!php Query::lazily()`/`#!php Select::lazily()`.
 
 ```php
-$select = Select::onDemand(Name::of('users'));
+$select = Select::lazily(Name::of('users'));
 
 $sql($select)->foreach(
     static fn(Row $row) => doStuff($row),
@@ -162,20 +163,16 @@ With this even if the result contains a million rows there'll only be one at a t
 To run queries inside a transaction you need to run the corresponding sql queries like this:
 
 ```php
-use Formal\AccessLayer\Query\{
-    StartTransaction,
-    Commit,
-    Rollback,
-};
+use Formal\AccessLayer\Query\Transaction;
 
 try {
-    $sql(new StartTransaction);
+    $sql(Transaction::start);
 
     // run your queries here
 
-    $sql(new Commit);
+    $sql((Transaction::commit);
 } catch (\Throwable $e) {
-    $sql(new Rollback);
+    $sql((Transaction::rollback);
 
     throw $e;
 }

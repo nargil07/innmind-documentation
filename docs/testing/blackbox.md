@@ -7,7 +7,7 @@ It follows [Innmind's philosophy](../philosophy/index.md) meaning it can be inte
 ## Installation
 
 ```sh
-composer require --dev innmind/black-box '~6.5'
+composer require --dev innmind/black-box '~7.0'
 ```
 
 ## Setup
@@ -18,11 +18,14 @@ declare(strict_types = 1);
 
 require 'vendor/autoload.php';
 
-use Innmind\BlackBox\Application;
+use Innmind\BlackBox\{
+    Application,
+    Prove,
+};
 
 Application::new($argv) #(1)
-    ->tryToProve(function() {
-        yield test(
+    ->tryToProve(function(Prove $prove) {
+        yield $prove->test(
             'More on tests in the next chapter',
             static fn($assert) => $assert->true(true),
         );
@@ -47,8 +50,8 @@ In the example above the tests are provided inside an inline generator. This is 
     ```php title="proofs/file1.php"
     <?php
 
-    return static function() {
-        yield test(
+    return static function(Prove $prove) {
+        yield $prove->test(
             'Test 1',
             static fn($assert) => $assert->true(true),
         );
@@ -59,8 +62,8 @@ In the example above the tests are provided inside an inline generator. This is 
     ```php title="proofs/file2.php"
     <?php
 
-    return static function() {
-        yield test(
+    return static function(Prove $prove) {
+        yield $prove->test(
             'Test 2',
             static fn($assert) => $assert->true(true),
         );
@@ -78,9 +81,9 @@ require 'vendor/autoload.php';
 use Innmind\BlackBox\Application;
 
 Application::new($argv)
-    ->tryToProve(function() {
-        yield from (require 'proofs/file1.php');
-        yield from (require 'proofs/file2.php');
+    ->tryToProve(function(Prove $prove) {
+        yield from (require 'proofs/file1.php')($prove);
+        yield from (require 'proofs/file2.php')($prove);
     })
     ->exit();
 ```
@@ -116,10 +119,12 @@ You declare them this way:
 ```php
 use Innmind\BlackBox\Tag;
 
-yield test( #(1)
-    'Test name',
-    static fn($assert) => $assert->true(true),
-)->tag(Tag::positive, Tag::wip);
+yield $prove
+    ->test( #(1)
+        'Test name',
+        static fn($assert) => $assert->true(true),
+    )
+    ->tag(Tag::positive, Tag::wip);
 ```
 
 1. Refer to example above to know where to place a test.

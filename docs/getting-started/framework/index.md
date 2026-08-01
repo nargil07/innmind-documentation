@@ -3,7 +3,7 @@
 ## Installation
 
 ```sh
-composer require innmind/framework:~3.0
+composer require innmind/framework:~4.1
 ```
 
 ## Concepts

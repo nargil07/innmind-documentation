@@ -63,7 +63,10 @@ You can always specify a body like so:
 ```php
 use Innmind\Filesystem\File\Content;
 use Innmind\Http\Header\ContentType;
-use Innmind\MediaType\MediaType;
+use Innmind\MediaType\{
+    MediaType,
+    TopLevel,
+};
 use Innmind\Json\Json;
 
 $request = Request::of(
@@ -71,7 +74,7 @@ $request = Request::of(
     Method::post,
     ProtocolVersion::v11,
     Headers::of(
-        ContentType::of(new MediaType('application', 'json')),
+        ContentType::of(MediaType::from(TopLevel::application, 'json')),
     ),
     Content::ofString(Json::encode(['some' => 'payload'])),
 );
@@ -88,9 +91,9 @@ You'll learn more on this `Content` in the [next chapter](filesystem.md).
 By default the client returned by `$os->remote()->http()` doesn't follow redirections. In order to do so you need to decorate the client like this:
 
 ```php
-use Innmind\HttpTransport\FollowRedirections;
+use Innmind\HttpTransport\Transport;
 
-$http = FollowRedirections::of($os->remote()->http());
+$http = Transport::followRedirections($os->remote()->http());
 ```
 
 This decorator will follow to up to `5` redirections.
@@ -111,10 +114,10 @@ The [circuit breaker](https://en.wikipedia.org/wiki/Circuit_breaker_design_patte
 You apply this pattern via this decorator:
 
 ```php
-use Innmind\HttpTransport\CircuitBreaker;
-use Innmind\TimeContinuum\Period;
+use Innmind\HttpTransport\Transport;
+use Innmind\Time\Period;
 
-$http = CircuitBreaker::of(
+$http = Transport::circuitBreaker(
     $os->remote()->http(),
     $os->clock(),
     Period::second(10),
@@ -132,12 +135,18 @@ $http = CircuitBreaker::of(
 When a call fail you can automatically retry the call after a certain amount of time. You can apply the retries like this:
 
 ```php
-use Innmind\HttpTransport\ExponentialBackoff;
+use Innmind\OperatingSystem\Config;
+use Innmind\HttpTransport\Transport;
 
-$http = ExponentialBackoff::of(
-    $os->remote()->http(),
-    $os->process()->halt(...),
-);
+$http = $os 
+    ->map(static fn(Config $config) => $config->mapHttpTransport(
+        static fn($transport) => Transport::exponentialBackoff(
+            $transport,
+            $config->halt(),
+        ),
+    ))
+    ->remote()
+    ->http();
 ```
 
 This will retry all errors `5XX` responses and connection failures at most 5 times and will wait `100ms`, `271ms`, `738ms`, `2s` and `5.4s` between each retry.
