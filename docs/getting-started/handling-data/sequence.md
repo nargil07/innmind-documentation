@@ -175,7 +175,7 @@ Since you'll not always have all the values known when creating a `Sequence`, yo
         ->add('bar')
         ->add('baz')
         ->toList();
-    $values = ['foo', 'bar', 'baz']; // return true
+    $values === ['foo', 'bar', 'baz']; // return true
     ```
 
 === "Declarative"
