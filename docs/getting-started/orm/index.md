@@ -8,6 +8,12 @@ This ORM focuses on simplifying data manipulation.
 ??? info
     Its monadic design allows it to be compatible with [Innmind's asynchronous context](../concurrency/async.md).
 
+## Installation
+
+```sh
+composer require formal/orm:~6.0
+```
+
 ## Example
 
 ```php
@@ -20,7 +26,8 @@ use Innmind\Url\Url;
 $manager = Manager::sql(
     $os
         ->remote()
-        ->sql(Url::of('mysql://user:pwd@host:3306/database?charset=utf8mb4')),
+        ->sql(Url::of('mysql://user:pwd@host:3306/database?charset=utf8mb4'))
+        ->unwrap(),
 );
 $_ = $manager
     ->repository(YourAggregate::class)

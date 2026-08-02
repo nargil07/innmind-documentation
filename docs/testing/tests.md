@@ -10,11 +10,12 @@ If we reuse the [`add` function](property-based-testing.md#examples):
 use Innmind\BlackBox\{
     Application,
     Runner\Assert,
+    Prove,
 };
 
 Application::new([])
-    ->tryToProve(function() {
-        yield test(
+    ->tryToProve(function(Prove $prove) {
+        yield $prove->test(
             'add(1, 2)',
             static fn(Assert $assert) => $assert
                 ->expected(3)
@@ -37,10 +38,11 @@ Sometime you may want to run the same test but with a different set of values. S
 use Innmind\BlackBox\{
     Application,
     Runner\Assert,
+    Prove,
 };
 
 Application::new([])
-    ->tryToProve(function() {
+    ->tryToProve(function(Prove $prove) {
         $cases = [
             [1, 2, 3],
             [2, 3, 5],
@@ -48,7 +50,7 @@ Application::new([])
         ];
 
         foreach ($cases as [$a, $b, $expected]) {
-            yield test(
+            yield $prove->test(
                 "add($a, $b)",
                 static fn(Assert $assert) => $assert
                     ->expected($expected)

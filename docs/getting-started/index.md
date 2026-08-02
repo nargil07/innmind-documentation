@@ -5,7 +5,7 @@ In this chapter you'll learn all the basic information to create simple scripts 
 Unless specified, the code exposed is accessible through the `foundation` package.
 
 ```sh
-composer require innmind/foundation '~1.10'
+composer require innmind/foundation '~2.1'
 ```
 
 !!! note

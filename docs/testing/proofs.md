@@ -4,26 +4,28 @@ A proof[^1] is a way to declare a behaviour for a range of values.
 
 Let's refactor the [previous test](tests.md):
 
-```php hl_lines="4 9 11-16"
+```php hl_lines="4 10 12-18"
 use Innmind\BlackBox\{
     Application,
     Runner\Assert,
     Set,
+    Prove,
 };
 
 Application::new([])
-    ->tryToProve(function() {
-        yield proof(
-            'add',
-            given(
+    ->tryToProve(function(Prove $prove) {
+        yield $prove 
+            ->proof(add')
+            ->given(
                 Set::of(1),
                 Set::of(2),
                 Set::of(3),
-            ),
-            static fn(Assert $assert, int $a, int $b, int $expected) => $assert
-                ->expected($expected)
-                ->same(add($a, $b)),
-        );
+            )
+            ->test(
+                static fn(Assert $assert, int $a, int $b, int $expected) => $assert
+                    ->expected($expected)
+                    ->same(add($a, $b)),
+            );
     })
     ->exit();
 ```
@@ -39,25 +41,25 @@ use Innmind\BlackBox\{
     Application,
     Runner\Assert,
     Set,
+    Prove,
 };
 
 Application::new([])
-    ->tryToProve(function() {
-        yield proof(
-            'add',
-            given(
+    ->tryToProve(function(Prove $prove) {
+        yield $prove 
+            ->proof('add')
+            ->given(
                 Set::of(
                     [1, 2, 3],
                     [2, 3, 5],
                 ),
-            ),
-            static function(Assert $assert, array $case) {
+            )
+            ->test(static function(Assert $assert, array $case) {
                 [$a, $b, $expected] = $case;
                 $assert
                     ->expected($expected)
                     ->same(add($a, $b));
-            }
-        );
+            });
     })
     ->exit();
 ```
@@ -71,41 +73,39 @@ use Innmind\BlackBox\{
     Application,
     Runner\Assert,
     Set,
+    Prove,
 };
 
 Application::new([])
-    ->tryToProve(function() {
-        yield proof(
-            'add is commutative',
-            given(
+    ->tryToProve(function(Prove $prove) {
+        yield $prove
+            ->proof('add is commutative')
+            ->given(
                 Set::integers(),
                 Set::integers(),
-            ),
-            static fn(Assert $assert, int $a, int $b) => $assert->same(
+            )
+            ->test(static fn(Assert $assert, int $a, int $b) => $assert->same(
                 add($a, $b),
                 add($b, $a),
-            ),
-        );
-        yield proof(
-            'add is cumulative',
-            given(
+            ));
+        yield $prove
+            ->proof('add is cumulative')
+            ->given(
                 Set::integers(),
                 Set::integers(),
                 Set::integers(),
-            ),
-            static fn(Assert $assert, int $a, int $b, int $c) => $assert->same(
+            )
+            ->test(static fn(Assert $assert, int $a, int $b, int $c) => $assert->same(
                 add($a, add($b, $c)),
                 add(add($a, $b), $c),
-            ),
-        );
-        yield proof(
-            '0 is an identity value',
-            given(Set::integers()),
-            static fn(Assert $assert, int $a) => $assert->same(
+            ));
+        yield $prove
+            ->proof('0 is an identity value')
+            ->given(Set::integers())
+            ->test(static fn(Assert $assert, int $a) => $assert->same(
                 $a,
                 add($a, 0), #(1)
-            ),
-        );
+            ));
     })
     ->exit();
 ```

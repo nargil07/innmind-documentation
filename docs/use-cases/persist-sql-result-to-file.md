@@ -18,7 +18,8 @@ use Formal\AccessLayer\{
 
 $sql = $os
     ->remote()
-    ->sql(Url::of('mysql://127.0.0.1:3306/database_name'));
+    ->sql(Url::of('mysql://127.0.0.1:3306/database_name'))
+    ->unwrap();
 
 $_ = $os
     ->filesystem()
@@ -27,7 +28,7 @@ $_ = $os
     ->add(File::named(
         'results.csv',
         Content::ofLines(
-            $sql(Select::onDemand(Name::of('table_name')))
+            $sql(Select::lazily(Name::of('table_name')))
                 ->map(
                     static fn($row) => $row
                         ->values()
@@ -40,4 +41,4 @@ $_ = $os
     ->unwrap();
 ```
 
-Since the sql query is lazy (thanks to `::onDemand()`) you can persist a very long result without loading everything in memory.
+Since the sql query is lazy you can persist a very long result without loading everything in memory.

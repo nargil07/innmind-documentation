@@ -19,20 +19,20 @@ You should use an in memory filesystem for your tests as it's the fastest since 
 
 ```php
 use Formal\ORM\Manager;
-use Innmind\Filesystem\Adapter\InMemory;
+use Innmind\Filesystem\Adapter;
 
-$adapter = InMemory::emulateFilesystem();
+$adapter = Adapter::inMemory();
 $orm = Manager::filesystem($adapter);
 ```
 
 Your aggregates will be kept in memory as long as there is a reference to `$adapter`. This means that if your test looks something like this it won't work:
 
 ```php
-$orm = Manager::filesystem(InMemory::emulateFilesystem());
+$orm = Manager::filesystem(Adapter::inMemory());
 
 // do some work that creates aggregates
 
-$orm = Manager::filesystem(InMemory::emulateFilesystem());
+$orm = Manager::filesystem(Adapter::inMemory());
 
 // run expectations on your aggregates
 ```

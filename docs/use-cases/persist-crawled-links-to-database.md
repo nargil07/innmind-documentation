@@ -22,7 +22,8 @@ use Formal\AccessLayer\{
 $read = Reader::new();
 $sql = $os
     ->remote()
-    ->sql(Url::of('mysql://127.0.0.1:3306/database_name'));
+    ->sql(Url::of('mysql://127.0.0.1:3306/database_name'))
+    ->unwrap();
 
 $_ = $os
     ->remote()

@@ -16,7 +16,7 @@ This ease the development on Innmind to understand in which order to update pack
 ### Installation
 
 ```sh
-composer global require innmind/dependency-graph:~3.5
+composer global require innmind/dependency-graph:~3.9
 ```
 
 ### Usage
@@ -52,12 +52,6 @@ composer global require innmind/dependency-graph:~3.5
 
     ![](assets/dependency-graph/innmind_cli_dependents.svg)
 
-### macOS App
-
-Instead of manually executing the CLI commands you can use this [macOS app](https://github.com/Innmind/macOS-tooling). You only need to specify the organization you want to visualize and the app will fetch everything necessary.
-
-![](assets/dependency-graph/macOS-app.png)
-
 ### Website
 
 The macOS App is also available as a website at <http://innmind.net>.
@@ -69,7 +63,7 @@ This tool automatically runs your tests, psalm and code style checker everytime 
 ### Installation
 
 ```sh
-composer global require innmind/lab-station:~4.1
+composer global require innmind/lab-station:~4.5
 ```
 
 ### Usage
@@ -89,7 +83,7 @@ This is a tool to create [SemVer](https://semver.org) tags.
 ### Installation
 
 ```sh
-composer global require innmind/git-release:~3.1
+composer global require innmind/git-release:~3.3
 ```
 
 ### Usage

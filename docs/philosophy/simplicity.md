@@ -36,6 +36,6 @@ The `Adapter` interface has a `get` method to return a file. Initially the argum
 
 The easiness of using a `string` brought complexity to the implementation to make sure all adapters behave the same way. And also brought difficulty to the user when switching an adapter for another, having to deal with the inconsistencies.
 
-The `string` was later replaced by the a class named `Name`. Any `Adapter` implementation has to check its behaviour to understand what's possible, no need to be aware of other implementations anymore.
+The `string` was later replaced by a class named `Name`. Any `Adapter` implementation has to check its behaviour to understand what's possible, no need to be aware of other implementations anymore.
 
 You'll find all kind of classes in this ecosystem that encapsulate values to reach this kind of simplicity.

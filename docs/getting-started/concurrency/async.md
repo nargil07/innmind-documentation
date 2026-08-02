@@ -80,7 +80,6 @@ Async works a bit like a reduce operation. The _reducer_ function allows to laun
     {
         /**
          * @param Continuation<Carried> $continuation
-         * @param Sequence<mixed> $results
          *
          * @return Continuation<Carried>
          */
@@ -88,13 +87,12 @@ Async works a bit like a reduce operation. The _reducer_ function allows to laun
             Carried $carried,
             OperatingSystem $os, #(1)
             Continuation $continuation,
-            Sequence $results, #(2)
         ): Continuation {
             if ($carried->needsToLaunchTasks()) {
                 return $continuation
-                    ->carryWith($carried->tasksLaunched()) #(3)
+                    ->carryWith($carried->tasksLaunched()) #(2)
                     ->schedule(Sequence::of(
-                        static fn(OperatingSystem $os) => MyTask::of( #(4)
+                        static fn(OperatingSystem $os) => MyTask::of( #(3)
                             $os,
                             'https://github.com/'
                         ),
@@ -105,7 +103,7 @@ Async works a bit like a reduce operation. The _reducer_ function allows to laun
                     ));
             }
 
-            $carried = $results->reduce(
+            $carried = $continuation->results()->reduce(
                 $carried,
                 static fn(
                     Carried $carried,
@@ -116,7 +114,7 @@ Async works a bit like a reduce operation. The _reducer_ function allows to laun
             if ($carried->responses()->size() === 2) {
                 return $continuation
                     ->carryWith($carried)
-                    ->finish(); #(5)
+                    ->finish(); #(4)
             }
 
             return $continuation
@@ -127,10 +125,9 @@ Async works a bit like a reduce operation. The _reducer_ function allows to laun
     ```
 
     1. This `$os` variable is a new instance built by Async and runs asynchronously.
-    2. This will contain the values returned by the tasks as soon as available.
-    3. We flip the flag in order to not launch the tasks each time the reducer is called.
-    4. The `$os` variable is a dedicated new instance for each task.
-    5. This tells Async to stop calling the reducer and return the carried value.
+    2. We flip the flag in order to not launch the tasks each time the reducer is called.
+    3. The `$os` variable is a dedicated new instance for each task.
+    4. This tells Async to stop calling the reducer and return the carried value.
 
     This `__invoke` method will be called once when starting the runner and then each time a task finishes.
 

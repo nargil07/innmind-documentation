@@ -55,7 +55,6 @@ nav:
   - Use cases:
     - use-cases/index.md
     - Upload a local file via HTTP: use-cases/upload-local-file.md
-    - Copy a local directory to S3: use-cases/copy-local-directory-to-s3.md
     - Serve a S3 file via an HTTP server: use-cases/serve-s3-file.md
     - Persist a SQL result to a file: use-cases/persist-sql-result-to-file.md
     - Persist crawled links to a database: use-cases/persist-crawled-links-to-database.md
@@ -159,9 +158,9 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/Innmind
-    - icon: fontawesome/brands/x-twitter
-      link: https://twitter.com/Baptouuuu
     - icon: fontawesome/brands/mastodon
       link: https://phpc.social/@baptouuuu
     - icon: fontawesome/brands/bluesky
       link: https://bsky.app/profile/baptouuuu.bsky.social
+    - icon: fontawesome/solid/link
+      link: https://baptouuuu.github.io

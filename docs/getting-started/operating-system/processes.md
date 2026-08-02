@@ -77,7 +77,7 @@ echo $os
     ->unwrap()
     ->output()
     ->map(static fn(Chunk $chunk) => $chunk->data())
-    ->fold(new Concat)
+    ->fold(Concat::monoid)
     ->toString();
 ```
 

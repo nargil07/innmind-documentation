@@ -10,7 +10,7 @@ You need to first install a server that implements this protocol (1). The most w
 ## Installation
 
 ```sh
-composer require innmind/amqp '~6.0'
+composer require innmind/amqp '~7.0'
 ```
 
 ## Usage
@@ -24,7 +24,7 @@ use Innmind\AMQP\{
     Model\Exchange\Type,
 };
 use Innmind\IO\Sockets\Internet\Transport;
-use Innmind\TimeContinuum\Period;
+use Innmind\Time\Period;
 use Innmind\Url\Url;
 
 $client = Factory::of($os)
